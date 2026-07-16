@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel | LORE</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <a href="/admin/painel" class="logo">LORE</a>
+      <nav class="nav-links"></nav>
+      <button id="botao-sair" class="botao botao-secundario">Sair</button>
+    </div>
+  </header>
+
+  <main class="painel-admin">
+    <div class="container">
+      <div class="painel-header">
+        <h1>Painel administrativo</h1>
+      </div>
+
+      <div class="abas">
+        <button class="aba-botao ativa" data-aba="solicitacoes">Solicitações</button>
+        <button class="aba-botao" data-aba="clientes">Clientes</button>
+      </div>
+
+      <!-- Aba Solicitações -->
+      <section id="aba-solicitacoes" class="painel-conteudo ativa">
+        <div class="tabela-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>WhatsApp</th>
+                <th>Serviço</th>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela-agendamentos">
+              <tr><td colspan="6" class="carregando">Carregando solicitações...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Aba Clientes -->
+      <section id="aba-clientes" class="painel-conteudo">
+        <div id="lista-clientes-wrapper" class="tabela-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>WhatsApp</th>
+                <th>Último atendimento</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela-clientes">
+              <tr><td colspan="3" class="carregando">Carregando clientes...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Ficha do cliente -->
+        <div id="ficha-cliente" class="ficha-cliente oculto">
+          <a href="#" id="voltar-lista-clientes" class="voltar">&larr; Voltar para a lista</a>
+          <h2 id="ficha-nome"></h2>
+          <p class="whatsapp-cliente" id="ficha-whatsapp"></p>
+
+          <div class="campo">
+            <label for="ficha-observacoes">Observações gerais</label>
+            <textarea id="ficha-observacoes" placeholder="Sensibilidades, alergias, preferências de técnica..."></textarea>
+          </div>
+          <button id="botao-salvar-observacoes" class="botao botao-primario">Salvar observações</button>
+
+          <h3 style="margin-top: 32px; margin-bottom: 16px;">Histórico de atendimentos</h3>
+          <div id="historico-atendimentos"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

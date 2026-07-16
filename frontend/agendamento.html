@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendar horário | LORE</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <a href="/" class="logo">LORE</a>
+      <nav class="nav-links"></nav>
+      <a href="/" class="botao botao-secundario">Voltar ao site</a>
+    </div>
+  </header>
+
+  <main class="pagina-agendamento">
+    <div class="container">
+      <div class="form-card">
+
+        <!-- Formulário -->
+        <div id="bloco-formulario">
+          <h1>Agendar horário</h1>
+          <p class="subtitulo">Preencha seus dados. Depois é só confirmar pelo WhatsApp.</p>
+
+          <div id="mensagem-erro-api" class="mensagem-api erro"></div>
+
+          <form id="form-agendamento" novalidate>
+            <div class="campo" data-campo="nome_cliente">
+              <label for="nome_cliente">Nome completo</label>
+              <input type="text" id="nome_cliente" name="nome_cliente" required>
+              <span class="campo-erro">Digite seu nome completo.</span>
+            </div>
+
+            <div class="campo" data-campo="whatsapp">
+              <label for="whatsapp">WhatsApp</label>
+              <input type="tel" id="whatsapp" name="whatsapp" placeholder="(61) 99999-9999" required>
+              <span class="campo-erro">Digite um número de WhatsApp válido.</span>
+            </div>
+
+            <div class="campo" data-campo="servico">
+              <label for="servico">Serviço desejado</label>
+              <select id="servico" name="servico" required>
+                <option value="" disabled selected>Selecione um serviço</option>
+                <option value="cilios_tela">Cílios em Tela</option>
+                <option value="brow_lamination">Brow Lamination</option>
+                <option value="design_sobrancelha">Design de Sobrancelha</option>
+                <option value="buco">Buço</option>
+                <option value="masculino">Atendimento Masculino</option>
+              </select>
+              <span class="campo-erro">Escolha um serviço.</span>
+            </div>
+
+            <div class="campo" data-campo="data_preferida">
+              <label for="data_preferida">Data preferida</label>
+              <input type="date" id="data_preferida" name="data_preferida" required>
+              <span class="campo-erro">Escolha uma data válida.</span>
+            </div>
+
+            <div class="campo" data-campo="horario_preferido">
+              <label for="horario_preferido">Horário preferido</label>
+              <select id="horario_preferido" name="horario_preferido" required>
+                <option value="" disabled selected>Selecione um horário</option>
+              </select>
+              <span class="campo-erro">Escolha um horário entre 14h e 20h.</span>
+            </div>
+
+            <div class="campo">
+              <label for="observacoes">Observações (opcional)</label>
+              <textarea id="observacoes" name="observacoes" placeholder="Alguma informação importante? Alergias, preferências, etc."></textarea>
+            </div>
+
+            <button type="submit" class="botao botao-primario botao-bloco" id="botao-enviar">
+              Enviar solicitação
+            </button>
+          </form>
+        </div>
+
+        <!-- Confirmação -->
+        <div id="bloco-confirmacao" class="confirmacao oculto">
+          <div class="icone-check">✓</div>
+          <h2>Recebemos sua solicitação!</h2>
+          <p>Para confirmar mais rápido, toque no botão abaixo e envie a mensagem no WhatsApp.</p>
+          <a id="link-whatsapp-confirmacao" href="#" target="_blank" rel="noopener" class="botao botao-whatsapp botao-bloco">
+            Confirmar no WhatsApp
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/agendamento.js"></script>
+</body>
+</html>

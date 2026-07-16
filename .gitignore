@@ -1,0 +1,8 @@
+.claude/
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/lore.db
+backend/cookies.txt
+*.pyc
+.env
