@@ -269,6 +269,14 @@ ul {
   box-shadow: var(--sombra);
 }
 
+.hero-imagem .foto-hero {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
 @media (min-width: 900px) {
   .hero .container {
     flex-direction: row;
