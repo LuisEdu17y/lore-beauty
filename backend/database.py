@@ -1,4 +1,4 @@
-"""Conexão com o banco SQLite via SQLModel."""
+"""Conexão com o banco via SQLModel — SQLite em desenvolvimento, Postgres em produção."""
 import os
 
 from dotenv import load_dotenv
@@ -6,13 +6,15 @@ from sqlmodel import Session, SQLModel, create_engine, select
 
 load_dotenv()
 
-# Em produção (Railway), aponte para o caminho de um volume persistente, ex:
-# LORE_DATABASE_URL=sqlite:////data/lore.db — sem isso, o banco é apagado a cada deploy.
+# Em produção, aponte LORE_DATABASE_URL pra um Postgres gerenciado (ex: Neon, Supabase),
+# já que o disco do Render é apagado a cada deploy — SQLite local não sobrevive lá.
+# Ex: LORE_DATABASE_URL=postgresql://usuario:senha@host/banco?sslmode=require
 DATABASE_URL = os.environ.get("LORE_DATABASE_URL", "sqlite:///./lore.db")
 
-# check_same_thread=False necessário porque o SQLite é acessado por múltiplas
-# requisições do FastAPI, que podem rodar em threads diferentes
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+# check_same_thread=False só se aplica ao SQLite (acessado por múltiplas threads do FastAPI);
+# o driver do Postgres já é thread-safe e não aceita esse argumento.
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 
 SERVICOS_PADRAO = [
     {

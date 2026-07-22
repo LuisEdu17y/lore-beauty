@@ -6,3 +6,4 @@ bcrypt
 python-multipart
 cloudinary
 python-dotenv
+psycopg2-binary
