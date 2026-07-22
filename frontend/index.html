@@ -15,6 +15,7 @@
       <nav class="nav-links">
         <a href="#servicos">Serviços</a>
         <a href="#galeria">Galeria</a>
+        <a href="#antes-depois">Antes e Depois</a>
         <a href="#como-funciona">Como funciona</a>
         <a href="#depoimentos">Depoimentos</a>
         <a href="#localizacao">Localização</a>
@@ -42,6 +43,18 @@
             [PLACEHOLDER: foto principal cadastrada em Conteúdo &gt; Galeria (categoria "Hero principal")]
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Carrossel de destaques -->
+    <section id="carrossel" class="secao oculto">
+      <div class="container">
+        <div class="carrossel-wrapper">
+          <button type="button" class="carrossel-seta carrossel-seta-anterior oculto" aria-label="Foto anterior">&larr;</button>
+          <div class="carrossel-trilho" id="carrossel-trilho"></div>
+          <button type="button" class="carrossel-seta carrossel-seta-proxima oculto" aria-label="Próxima foto">&rarr;</button>
+        </div>
+        <div class="carrossel-pontos oculto" id="carrossel-pontos"></div>
       </div>
     </section>
 
@@ -74,6 +87,15 @@
         <h2 class="secao-titulo">Galeria</h2>
         <p class="secao-subtitulo">Alguns dos trabalhos realizados.</p>
         <div class="grid-galeria" id="grid-galeria"></div>
+      </div>
+    </section>
+
+    <!-- Antes e Depois -->
+    <section id="antes-depois" class="secao secao-alt oculto">
+      <div class="container">
+        <h2 class="secao-titulo">Antes e Depois</h2>
+        <p class="secao-subtitulo">Resultados reais de quem já confiou no trabalho da Lore.</p>
+        <div class="grid-antes-depois" id="grid-antes-depois"></div>
       </div>
     </section>
 
@@ -116,6 +138,13 @@
       </div>
     </section>
 
+    <!-- Banner promocional -->
+    <section id="banner" class="secao oculto">
+      <div class="container">
+        <img id="imagem-banner" class="imagem-banner" alt="Promoção">
+      </div>
+    </section>
+
     <!-- Localização & Horários -->
     <section id="localizacao" class="secao localizacao">
       <div class="container">
@@ -147,6 +176,7 @@
         <a href="/agendamento">Agendar horário</a>
       </div>
       <small>&copy; <span id="ano-atual"></span> LORE. Todos os direitos reservados.</small>
+      <a href="/admin/login" class="link-admin">Área administrativa</a>
     </div>
   </footer>
 

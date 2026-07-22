@@ -141,6 +141,112 @@ async function carregarDepoimentos() {
   }
 }
 
+let carrosselImagens = [];
+let carrosselIndice = 0;
+
+function irParaSlideCarrossel(indice) {
+  const total = carrosselImagens.length;
+  if (!total) return;
+  carrosselIndice = (indice + total) % total;
+
+  document
+    .querySelectorAll(".carrossel-item")
+    .forEach((item, i) => item.classList.toggle("ativo", i === carrosselIndice));
+  document
+    .querySelectorAll(".carrossel-ponto")
+    .forEach((ponto, i) => ponto.classList.toggle("ativo", i === carrosselIndice));
+}
+
+async function carregarCarrossel() {
+  const secao = document.getElementById("carrossel");
+  const trilho = document.getElementById("carrossel-trilho");
+  const pontos = document.getElementById("carrossel-pontos");
+  const setaAnterior = document.querySelector(".carrossel-seta-anterior");
+  const setaProxima = document.querySelector(".carrossel-seta-proxima");
+  if (!secao || !trilho || !pontos) return;
+
+  try {
+    const resposta = await fetch("/api/imagens?categoria=carrossel");
+    if (!resposta.ok) return;
+    carrosselImagens = await resposta.json();
+    if (!carrosselImagens.length) return;
+
+    trilho.innerHTML = carrosselImagens
+      .map(
+        (imagem, indice) =>
+          `<img src="${imagem.url_imagem}" alt="${imagem.titulo || "Foto em destaque"}" class="carrossel-item ${indice === 0 ? "ativo" : ""}">`
+      )
+      .join("");
+
+    if (carrosselImagens.length > 1) {
+      pontos.innerHTML = carrosselImagens
+        .map(
+          (_, indice) =>
+            `<button type="button" class="carrossel-ponto ${indice === 0 ? "ativo" : ""}" data-indice="${indice}" aria-label="Ir para foto ${indice + 1}"></button>`
+        )
+        .join("");
+      pontos.querySelectorAll(".carrossel-ponto").forEach((ponto) => {
+        ponto.addEventListener("click", () => irParaSlideCarrossel(Number(ponto.dataset.indice)));
+      });
+      pontos.classList.remove("oculto");
+      setaAnterior.classList.remove("oculto");
+      setaProxima.classList.remove("oculto");
+      setaAnterior.addEventListener("click", () => irParaSlideCarrossel(carrosselIndice - 1));
+      setaProxima.addEventListener("click", () => irParaSlideCarrossel(carrosselIndice + 1));
+      setInterval(() => irParaSlideCarrossel(carrosselIndice + 1), 5000);
+    }
+
+    secao.classList.remove("oculto");
+  } catch (erro) {
+    // API indisponível: seção fica oculta
+  }
+}
+
+async function carregarAntesDepois() {
+  const secao = document.getElementById("antes-depois");
+  const grid = document.getElementById("grid-antes-depois");
+  if (!secao || !grid) return;
+
+  try {
+    const resposta = await fetch("/api/imagens?categoria=antes_depois");
+    if (!resposta.ok) return;
+    const imagens = await resposta.json();
+    if (!imagens.length) return;
+
+    grid.innerHTML = imagens
+      .map(
+        (imagem) => `
+      <figure class="item-antes-depois">
+        <img src="${imagem.url_imagem}" alt="${imagem.titulo || "Antes e depois"}">
+        ${imagem.titulo ? `<figcaption>${imagem.titulo}</figcaption>` : ""}
+      </figure>`
+      )
+      .join("");
+    secao.classList.remove("oculto");
+  } catch (erro) {
+    // API indisponível: seção fica oculta
+  }
+}
+
+async function carregarBanner() {
+  const secao = document.getElementById("banner");
+  const img = document.getElementById("imagem-banner");
+  if (!secao || !img) return;
+
+  try {
+    const resposta = await fetch("/api/imagens?categoria=banner");
+    if (!resposta.ok) return;
+    const imagens = await resposta.json();
+    if (!imagens.length) return;
+
+    img.src = imagens[0].url_imagem;
+    img.alt = imagens[0].titulo || img.alt;
+    secao.classList.remove("oculto");
+  } catch (erro) {
+    // API indisponível: seção fica oculta
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const spanAno = document.getElementById("ano-atual");
   if (spanAno) {
@@ -152,4 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
   carregarServicos();
   carregarGaleria();
   carregarDepoimentos();
+  carregarCarrossel();
+  carregarAntesDepois();
+  carregarBanner();
 });

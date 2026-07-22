@@ -1020,3 +1020,144 @@ select.select-status {
 .foto-galeria:hover {
   transform: translateY(-4px);
 }
+
+/* ---------- Carrossel de destaques ---------- */
+.carrossel-wrapper {
+  position: relative;
+  border-radius: var(--raio);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+  aspect-ratio: 16 / 9;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.carrossel-item {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.carrossel-item.ativo {
+  opacity: 1;
+}
+
+.carrossel-seta {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--cor-texto);
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.carrossel-seta:hover {
+  background: var(--cor-branco);
+}
+
+.carrossel-seta-anterior {
+  left: 12px;
+}
+
+.carrossel-seta-proxima {
+  right: 12px;
+}
+
+.carrossel-pontos {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.carrossel-ponto {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  background: var(--cor-nude-claro);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.carrossel-ponto.ativo {
+  background: var(--cor-blush);
+  transform: scale(1.2);
+}
+
+/* ---------- Antes e Depois ---------- */
+.grid-antes-depois {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .grid-antes-depois {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 980px) {
+  .grid-antes-depois {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.item-antes-depois {
+  background: var(--cor-fundo-alt);
+  border-radius: var(--raio);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+
+.item-antes-depois img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.item-antes-depois figcaption {
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  color: var(--cor-texto-suave);
+  text-align: center;
+}
+
+/* ---------- Banner promocional ---------- */
+.imagem-banner {
+  width: 100%;
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  object-fit: cover;
+  max-height: 420px;
+}
+
+/* ---------- Link para a área administrativa (footer) ---------- */
+.link-admin {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.78rem;
+  color: var(--cor-fundo);
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
+}
+
+.link-admin:hover {
+  opacity: 0.9;
+}
