@@ -1,1 +1,9 @@
--r backend/requirements.txt
+fastapi
+uvicorn[standard]
+sqlmodel
+pyjwt
+bcrypt
+python-multipart
+cloudinary
+python-dotenv
+psycopg2-binary
