@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conteúdo · Serviços | LORE</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <a href="/admin/painel" class="logo">LORE</a>
+      <nav class="nav-links nav-admin">
+        <a href="/admin/painel">Agendamentos</a>
+        <a href="/admin/conteudo/galeria" class="ativo">Conteúdo</a>
+      </nav>
+      <button id="botao-sair" class="botao botao-secundario">Sair</button>
+    </div>
+  </header>
+
+  <main class="painel-admin">
+    <div class="container">
+      <nav class="subnav-conteudo">
+        <a href="/admin/conteudo/galeria">Fotos</a>
+        <a href="/admin/conteudo/servicos" class="ativa">Serviços</a>
+        <a href="/admin/conteudo/depoimentos">Depoimentos</a>
+        <a href="/admin/conteudo/textos">Textos</a>
+      </nav>
+
+      <div class="painel-header">
+        <h1>Conteúdo &middot; Serviços</h1>
+        <button id="botao-novo-servico" class="botao botao-primario">+ Adicionar serviço</button>
+      </div>
+
+      <!-- Lista de serviços -->
+      <div id="lista-servicos-wrapper">
+        <div class="tabela-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Ícone</th>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Duração/Preço</th>
+                <th>Ordem</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela-servicos">
+              <tr><td colspan="7" class="carregando">Carregando serviços...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Painel de adicionar/editar -->
+      <div id="painel-formulario-servico" class="ficha-cliente oculto">
+        <a href="#" id="voltar-lista-servicos" class="voltar">&larr; Voltar para a lista</a>
+        <h2 id="titulo-formulario-servico">Adicionar serviço</h2>
+
+        <div id="mensagem-erro-servico" class="mensagem-api erro"></div>
+
+        <form id="form-servico">
+          <div class="campo">
+            <label for="servico-titulo">Título</label>
+            <input type="text" id="servico-titulo" name="titulo" required>
+          </div>
+
+          <div class="campo">
+            <label for="servico-icone">Ícone (cole um emoji, ex: ✨)</label>
+            <input type="text" id="servico-icone" name="icone" maxlength="4">
+          </div>
+
+          <div class="campo">
+            <label for="servico-descricao">Descrição</label>
+            <textarea id="servico-descricao" name="descricao" required></textarea>
+          </div>
+
+          <div class="campo">
+            <label for="servico-duracao-preco">Duração e preço (opcional)</label>
+            <input type="text" id="servico-duracao-preco" name="duracao_preco" placeholder="ex: 40min · R$120">
+          </div>
+
+          <div class="campo">
+            <label for="servico-ordem">Ordem de exibição</label>
+            <input type="number" id="servico-ordem" name="ordem_exibicao" min="0" value="0" required>
+          </div>
+
+          <button type="submit" class="botao botao-primario" id="botao-salvar-servico">Salvar</button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/servicos.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conteúdo · Galeria | LORE</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <a href="/admin/painel" class="logo">LORE</a>
+      <nav class="nav-links nav-admin">
+        <a href="/admin/painel">Agendamentos</a>
+        <a href="/admin/conteudo/galeria" class="ativo">Conteúdo</a>
+      </nav>
+      <button id="botao-sair" class="botao botao-secundario">Sair</button>
+    </div>
+  </header>
+
+  <main class="painel-admin">
+    <div class="container">
+      <nav class="subnav-conteudo">
+        <a href="/admin/conteudo/galeria" class="ativa">Fotos</a>
+        <a href="/admin/conteudo/servicos">Serviços</a>
+        <a href="/admin/conteudo/depoimentos">Depoimentos</a>
+        <a href="/admin/conteudo/textos">Textos</a>
+      </nav>
+
+      <div class="painel-header">
+        <h1>Conteúdo &middot; Galeria</h1>
+        <button id="botao-nova-imagem" class="botao botao-primario">+ Adicionar imagem</button>
+      </div>
+
+      <!-- Lista de imagens -->
+      <div id="lista-imagens-wrapper">
+        <div class="campo" style="max-width: 260px;">
+          <label for="filtro-categoria">Filtrar por categoria</label>
+          <select id="filtro-categoria">
+            <option value="">Todas</option>
+            <option value="hero">Hero principal</option>
+            <option value="carrossel">Carrossel</option>
+            <option value="galeria">Galeria</option>
+            <option value="antes_depois">Antes e Depois</option>
+            <option value="banner">Banner promocional</option>
+          </select>
+        </div>
+
+        <div class="tabela-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Preview</th>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Ordem</th>
+                <th>Status</th>
+                <th>Criada em</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela-imagens">
+              <tr><td colspan="7" class="carregando">Carregando imagens...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Painel de adicionar/editar -->
+      <div id="painel-formulario-imagem" class="ficha-cliente oculto">
+        <a href="#" id="voltar-lista-imagens" class="voltar">&larr; Voltar para a lista</a>
+        <h2 id="titulo-formulario-imagem">Adicionar imagem</h2>
+
+        <div id="mensagem-erro-imagem" class="mensagem-api erro"></div>
+
+        <form id="form-imagem">
+          <div class="campo">
+            <label for="imagem-titulo">Título</label>
+            <input type="text" id="imagem-titulo" name="titulo" required>
+          </div>
+
+          <div class="campo">
+            <label for="imagem-descricao">Descrição (opcional)</label>
+            <textarea id="imagem-descricao" name="descricao"></textarea>
+          </div>
+
+          <div class="campo">
+            <label for="imagem-categoria">Onde essa imagem será usada</label>
+            <select id="imagem-categoria" name="categoria" required>
+              <option value="hero">Hero principal</option>
+              <option value="carrossel">Carrossel</option>
+              <option value="galeria">Galeria</option>
+              <option value="antes_depois">Antes e Depois</option>
+              <option value="banner">Banner promocional</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="imagem-ordem">Ordem de exibição</label>
+            <input type="number" id="imagem-ordem" name="ordem_exibicao" min="0" value="0" required>
+          </div>
+
+          <div class="campo" id="campo-arquivo-imagem">
+            <label for="imagem-arquivo">Arquivo (imagem)</label>
+            <input type="file" id="imagem-arquivo" name="arquivo" accept="image/*">
+            <img id="preview-arquivo-imagem" class="preview-upload oculto" alt="Pré-visualização">
+          </div>
+
+          <button type="submit" class="botao botao-primario" id="botao-salvar-imagem">Salvar</button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/galeria.js"></script>
+</body>
+</html>

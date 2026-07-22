@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conteúdo · Textos | LORE</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <a href="/admin/painel" class="logo">LORE</a>
+      <nav class="nav-links nav-admin">
+        <a href="/admin/painel">Agendamentos</a>
+        <a href="/admin/conteudo/galeria" class="ativo">Conteúdo</a>
+      </nav>
+      <button id="botao-sair" class="botao botao-secundario">Sair</button>
+    </div>
+  </header>
+
+  <main class="painel-admin">
+    <div class="container">
+      <nav class="subnav-conteudo">
+        <a href="/admin/conteudo/galeria">Fotos</a>
+        <a href="/admin/conteudo/servicos">Serviços</a>
+        <a href="/admin/conteudo/depoimentos">Depoimentos</a>
+        <a href="/admin/conteudo/textos" class="ativa">Textos</a>
+      </nav>
+
+      <div class="painel-header">
+        <h1>Conteúdo &middot; Textos</h1>
+      </div>
+
+      <div class="ficha-cliente" style="max-width: 640px;">
+        <div id="mensagem-erro-textos" class="mensagem-api erro"></div>
+        <div id="mensagem-sucesso-textos" class="mensagem-api" style="background: #dcf2df; color: #297b3d;"></div>
+
+        <form id="form-textos">
+          <div class="campo">
+            <label for="texto-sobre">Texto "Sobre a Lore"</label>
+            <textarea id="texto-sobre" name="texto_sobre" placeholder="Conte sua trajetória, formação e o que te diferencia..."></textarea>
+          </div>
+
+          <div class="campo">
+            <label for="texto-pos-procedimento">Cuidados pós-procedimento</label>
+            <textarea id="texto-pos-procedimento" name="texto_pos_procedimento" placeholder="Orientações que a cliente deve seguir depois do atendimento..."></textarea>
+          </div>
+
+          <div class="campo">
+            <label for="endereco">Endereço do estúdio</label>
+            <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade">
+          </div>
+
+          <div class="campo">
+            <label for="instagram-link">Link do Instagram</label>
+            <input type="url" id="instagram-link" name="instagram_link" placeholder="https://instagram.com/seu_perfil">
+          </div>
+
+          <div class="campo">
+            <label for="mapa-embed-url">Link do mapa incorporado (opcional)</label>
+            <input type="url" id="mapa-embed-url" name="mapa_embed_url" placeholder="https://www.google.com/maps/embed?...">
+            <small style="color: var(--cor-texto-suave); display: block; margin-top: 6px;">
+              No Google Maps: Compartilhar &rarr; Incorporar um mapa &rarr; copie só a URL de dentro do <code>src="..."</code>
+            </small>
+          </div>
+
+          <button type="submit" class="botao botao-primario" id="botao-salvar-textos">Salvar alterações</button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/textos.js"></script>
+</body>
+</html>

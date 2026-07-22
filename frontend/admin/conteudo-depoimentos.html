@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conteúdo · Depoimentos | LORE</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <a href="/admin/painel" class="logo">LORE</a>
+      <nav class="nav-links nav-admin">
+        <a href="/admin/painel">Agendamentos</a>
+        <a href="/admin/conteudo/galeria" class="ativo">Conteúdo</a>
+      </nav>
+      <button id="botao-sair" class="botao botao-secundario">Sair</button>
+    </div>
+  </header>
+
+  <main class="painel-admin">
+    <div class="container">
+      <nav class="subnav-conteudo">
+        <a href="/admin/conteudo/galeria">Fotos</a>
+        <a href="/admin/conteudo/servicos">Serviços</a>
+        <a href="/admin/conteudo/depoimentos" class="ativa">Depoimentos</a>
+        <a href="/admin/conteudo/textos">Textos</a>
+      </nav>
+
+      <div class="painel-header">
+        <h1>Conteúdo &middot; Depoimentos</h1>
+        <button id="botao-novo-depoimento" class="botao botao-primario">+ Adicionar depoimento</button>
+      </div>
+
+      <!-- Lista de depoimentos -->
+      <div id="lista-depoimentos-wrapper">
+        <div class="tabela-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Autor</th>
+                <th>Depoimento</th>
+                <th>Estrelas</th>
+                <th>Ordem</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela-depoimentos">
+              <tr><td colspan="6" class="carregando">Carregando depoimentos...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Painel de adicionar/editar -->
+      <div id="painel-formulario-depoimento" class="ficha-cliente oculto">
+        <a href="#" id="voltar-lista-depoimentos" class="voltar">&larr; Voltar para a lista</a>
+        <h2 id="titulo-formulario-depoimento">Adicionar depoimento</h2>
+
+        <div id="mensagem-erro-depoimento" class="mensagem-api erro"></div>
+
+        <form id="form-depoimento">
+          <div class="campo">
+            <label for="depoimento-autor">Autor (nome da cliente)</label>
+            <input type="text" id="depoimento-autor" name="autor" required>
+          </div>
+
+          <div class="campo">
+            <label for="depoimento-texto">Depoimento</label>
+            <textarea id="depoimento-texto" name="texto" required></textarea>
+          </div>
+
+          <div class="campo">
+            <label for="depoimento-estrelas">Estrelas</label>
+            <select id="depoimento-estrelas" name="estrelas">
+              <option value="5">★★★★★ (5)</option>
+              <option value="4">★★★★☆ (4)</option>
+              <option value="3">★★★☆☆ (3)</option>
+              <option value="2">★★☆☆☆ (2)</option>
+              <option value="1">★☆☆☆☆ (1)</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="depoimento-ordem">Ordem de exibição</label>
+            <input type="number" id="depoimento-ordem" name="ordem_exibicao" min="0" value="0" required>
+          </div>
+
+          <button type="submit" class="botao botao-primario" id="botao-salvar-depoimento">Salvar</button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/js/admin-common.js"></script>
+  <script src="/js/depoimentos.js"></script>
+</body>
+</html>

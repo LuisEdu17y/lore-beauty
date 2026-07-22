@@ -370,6 +370,12 @@ ul {
   font-size: 0.92rem;
 }
 
+.card-servico .duracao-preco {
+  color: var(--cor-nude);
+  font-weight: 600;
+  margin-top: 8px;
+}
+
 /* ---------- Como funciona (timeline) ---------- */
 .timeline {
   display: grid;
@@ -821,6 +827,9 @@ tr.linha-clicavel {
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 600;
+  border: none;
+  font-family: var(--fonte-corpo);
+  cursor: pointer;
 }
 
 .badge-pendente { background: #fdeecb; color: #9a6a12; }
@@ -893,4 +902,121 @@ select.select-status {
   text-align: center;
   color: var(--cor-texto-suave);
   padding: 24px;
+}
+
+/* Nav do admin: ao contrário do site público, fica visível em qualquer tamanho de tela */
+.nav-admin {
+  display: flex !important;
+  gap: 24px;
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+}
+
+.nav-admin a.ativo {
+  color: var(--cor-blush-escuro);
+  font-weight: 700;
+}
+
+/* ---------- Conteúdo > Galeria ---------- */
+.miniatura {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--raio-pequeno);
+}
+
+.botoes-ordem {
+  display: flex;
+  gap: 6px;
+}
+
+.botao-icone {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--raio-pequeno);
+  border: 1.5px solid var(--cor-nude-claro);
+  background: var(--cor-fundo-alt);
+  color: var(--cor-nude);
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.botao-icone:hover:not(:disabled) {
+  border-color: var(--cor-blush);
+  color: var(--cor-blush-escuro);
+}
+
+.botao-icone:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.preview-upload {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--raio-pequeno);
+  box-shadow: var(--sombra);
+}
+
+/* Sub-navegação entre as páginas de Conteúdo (Fotos, Serviços, Depoimentos, Textos) */
+.subnav-conteudo {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--cor-nude-claro);
+}
+
+.subnav-conteudo a {
+  display: inline-block;
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--cor-texto-suave);
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.subnav-conteudo a:hover {
+  color: var(--cor-blush-escuro);
+}
+
+.subnav-conteudo a.ativa {
+  color: var(--cor-blush-escuro);
+  border-bottom-color: var(--cor-blush);
+}
+
+/* ---------- Galeria / Portfólio (site público) ---------- */
+.grid-galeria {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .grid-galeria {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 980px) {
+  .grid-galeria {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.foto-galeria {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  transition: transform 0.2s ease;
+}
+
+.foto-galeria:hover {
+  transform: translateY(-4px);
 }
