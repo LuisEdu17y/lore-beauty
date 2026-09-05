@@ -4,6 +4,7 @@ from sqlmodel import Session, select
 
 from auth import exigir_admin
 from database import get_session
+from horarios import HorarioIndisponivel, validar_solicitacao
 from models import Agendamento, Atendimento, Cliente
 from schemas import AgendamentoCreate, AgendamentoStatusUpdate
 
@@ -12,7 +13,16 @@ router = APIRouter()
 
 @router.post("/api/agendamentos", response_model=Agendamento)
 def criar_agendamento(dados: AgendamentoCreate, session: Session = Depends(get_session)):
-    """Rota pública: cliente envia uma solicitação de agendamento pelo site."""
+    """Rota pública: cliente envia uma solicitação de agendamento pelo site.
+
+    A disponibilidade é revalidada aqui — o frontend só esconde os horários ocupados,
+    quem garante a regra é o backend.
+    """
+    try:
+        validar_solicitacao(session, dados.data_preferida, dados.horario_preferido)
+    except HorarioIndisponivel as erro:
+        raise HTTPException(status_code=400, detail=str(erro))
+
     agendamento = Agendamento(**dados.model_dump())
     session.add(agendamento)
     session.commit()

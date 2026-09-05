@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from database import criar_banco_e_tabelas, seed_servicos_padrao
-from routers import admin, agendamentos, clientes, conteudo, imagens
+from routers import admin, agendamentos, clientes, conteudo, disponibilidade, imagens
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
@@ -26,6 +26,7 @@ app.include_router(clientes.router)
 app.include_router(admin.router)
 app.include_router(imagens.router)
 app.include_router(conteudo.router)
+app.include_router(disponibilidade.router)
 
 # Arquivos estáticos (css, js, imagens)
 app.mount("/css", StaticFiles(directory=FRONTEND_DIR / "css"), name="css")

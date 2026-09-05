@@ -668,6 +668,11 @@ ul {
   color: #b3435a;
 }
 
+.mensagem-api.sucesso {
+  background: #dcf2df;
+  color: #297b3d;
+}
+
 /* ---------- Confirmação ---------- */
 .confirmacao {
   text-align: center;
@@ -1160,4 +1165,89 @@ select.select-status {
 
 .link-admin:hover {
   opacity: 0.9;
+}
+
+/* Aba Disponibilidade do painel */
+.dia-disponibilidade {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--cor-nude-claro);
+}
+
+.dia-disponibilidade:first-child {
+  padding-top: 0;
+}
+
+.dia-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--cor-texto);
+  cursor: pointer;
+  padding-bottom: 12px;
+}
+
+.dia-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--cor-blush);
+  cursor: pointer;
+}
+
+.dia-janela {
+  display: flex;
+  gap: 12px;
+}
+
+.dia-janela .campo {
+  margin-bottom: 0;
+}
+
+.dia-janela .campo label {
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--cor-texto-suave);
+}
+
+.dia-janela .campo input {
+  width: auto;
+  min-width: 110px;
+  padding: 9px 12px;
+}
+
+.dia-disponibilidade.inativo .dia-check span {
+  color: var(--cor-texto-suave);
+}
+
+.dia-disponibilidade.inativo .dia-janela {
+  opacity: 0.5;
+}
+
+#botao-salvar-disponibilidade {
+  margin-top: 24px;
+}
+
+@media (max-width: 520px) {
+  .dia-disponibilidade {
+    align-items: stretch;
+  }
+
+  .dia-janela {
+    width: 100%;
+  }
+
+  .dia-janela .campo {
+    flex: 1;
+  }
+
+  .dia-janela .campo input {
+    width: 100%;
+    min-width: 0;
+  }
 }
