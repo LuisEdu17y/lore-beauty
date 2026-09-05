@@ -7,3 +7,4 @@ backend/cookies.txt
 *.pyc
 .env
 uvicorn.log
+.venv

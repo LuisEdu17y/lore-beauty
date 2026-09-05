@@ -18,23 +18,73 @@ function aplicarMascaraTelefone(valor) {
   return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 7)}-${digitos.slice(7)}`;
 }
 
-function preencherHorarios() {
-  const select = document.getElementById("horario_preferido");
-  for (let hora = 14; hora < 20; hora++) {
-    for (const minuto of ["00", "30"]) {
-      const rotulo = `${String(hora).padStart(2, "0")}:${minuto}`;
-      const opcao = document.createElement("option");
-      opcao.value = rotulo;
-      opcao.textContent = rotulo;
-      select.appendChild(opcao);
-    }
-  }
+// Data de hoje no fuso do navegador. toISOString() converteria para UTC e à noite
+// devolveria o dia seguinte — por isso a montagem manual a partir dos campos locais.
+function dataLocalISO(data = new Date()) {
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+  return `${ano}-${mes}-${dia}`;
 }
 
 function definirDataMinima() {
   const input = document.getElementById("data_preferida");
-  const hoje = new Date().toISOString().split("T")[0];
-  input.min = hoje;
+  input.min = dataLocalISO();
+}
+
+function definirPlaceholderHorario(texto) {
+  const select = document.getElementById("horario_preferido");
+  select.innerHTML = "";
+  const opcao = document.createElement("option");
+  opcao.value = "";
+  opcao.disabled = true;
+  opcao.selected = true;
+  opcao.textContent = texto;
+  select.appendChild(opcao);
+}
+
+// Contador para descartar respostas atrasadas quando a cliente troca de data rápido
+let requisicaoHorariosAtual = 0;
+
+async function carregarHorarios(data) {
+  const select = document.getElementById("horario_preferido");
+
+  if (!data) {
+    select.disabled = true;
+    definirPlaceholderHorario("Escolha uma data primeiro");
+    return;
+  }
+
+  const requisicao = ++requisicaoHorariosAtual;
+  select.disabled = true;
+  definirPlaceholderHorario("Carregando horários...");
+
+  try {
+    const resposta = await fetch(`/api/disponibilidade?data=${encodeURIComponent(data)}`);
+    if (!resposta.ok) throw new Error("Falha ao consultar os horários");
+    const { horarios } = await resposta.json();
+
+    if (requisicao !== requisicaoHorariosAtual) return; // chegou fora de ordem
+
+    if (!horarios.length) {
+      definirPlaceholderHorario("Não há horários disponíveis para esta data.");
+      select.disabled = true;
+      return;
+    }
+
+    definirPlaceholderHorario("Selecione um horário");
+    for (const horario of horarios) {
+      const opcao = document.createElement("option");
+      opcao.value = horario;
+      opcao.textContent = horario;
+      select.appendChild(opcao);
+    }
+    select.disabled = false;
+  } catch (erro) {
+    if (requisicao !== requisicaoHorariosAtual) return;
+    definirPlaceholderHorario("Não foi possível carregar os horários. Tente novamente.");
+    select.disabled = true;
+  }
 }
 
 function mostrarErroCampo(nomeCampo, mostrar) {
@@ -104,8 +154,14 @@ async function enviarAgendamento(dados) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  preencherHorarios();
   definirDataMinima();
+  carregarHorarios(document.getElementById("data_preferida").value);
+
+  const inputData = document.getElementById("data_preferida");
+  inputData.addEventListener("change", () => {
+    mostrarErroCampo("horario_preferido", false);
+    carregarHorarios(inputData.value);
+  });
 
   const inputWhatsapp = document.getElementById("whatsapp");
   inputWhatsapp.addEventListener("input", (evento) => {
@@ -143,6 +199,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (erro) {
       mensagemErroApi.textContent = erro.message;
       mensagemErroApi.style.display = "block";
+      // A recusa pode ser um horário que acabou de ser ocupado — recarrega a lista
+      carregarHorarios(dados.data_preferida);
     } finally {
       botaoEnviar.disabled = false;
       botaoEnviar.textContent = "Enviar solicitação";

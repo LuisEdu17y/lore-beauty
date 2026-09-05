@@ -1,5 +1,5 @@
 """Modelos de dados (SQLModel) do site da Lore."""
-from datetime import date, datetime
+from datetime import date, datetime, time
 
 from sqlmodel import Field, SQLModel
 
@@ -13,6 +13,21 @@ SERVICOS_VALIDOS = [
 ]
 
 STATUS_VALIDOS = ["pendente", "confirmado", "atendido", "cancelado"]
+
+# Status que fazem o horário contar como ocupado na agenda pública.
+# "cancelado" libera o horário de volta.
+STATUS_QUE_OCUPAM_HORARIO = ["pendente", "confirmado", "atendido"]
+
+# Índice do dia da semana igual ao date.weekday() do Python: 0 = segunda ... 6 = domingo
+DIAS_SEMANA = [
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sábado",
+    "Domingo",
+]
 
 # Onde cada imagem do CMS pode ser usada pelo site
 CATEGORIAS_IMAGEM_VALIDAS = ["hero", "carrossel", "galeria", "antes_depois", "banner"]
@@ -30,6 +45,25 @@ class Agendamento(SQLModel, table=True):
     observacoes: str | None = None
     status: str = Field(default="pendente")
     criado_em: datetime = Field(default_factory=datetime.utcnow)
+
+
+class Disponibilidade(SQLModel, table=True):
+    """Janela de atendimento de um dia da semana, configurada pela Lore no painel.
+
+    Uma linha por dia (0 = segunda ... 6 = domingo). É a fonte única dos horários
+    oferecidos no formulário público — não existe mais horário fixo no frontend.
+
+    A estrutura é propositalmente por dia da semana (recorrente). Exceções pontuais
+    (feriados, datas bloqueadas, horários avulsos) devem entrar no futuro como um
+    modelo separado, sem alterar este.
+    """
+
+    id: int | None = Field(default=None, primary_key=True)
+    dia_semana: int = Field(unique=True, index=True)
+    hora_inicio: time
+    hora_fim: time
+    ativo: bool = Field(default=True)
+    atualizado_em: datetime = Field(default_factory=datetime.utcnow)
 
 
 class Cliente(SQLModel, table=True):

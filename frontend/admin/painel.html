@@ -30,6 +30,7 @@
       <div class="abas">
         <button class="aba-botao ativa" data-aba="solicitacoes">Solicitações</button>
         <button class="aba-botao" data-aba="clientes">Clientes</button>
+        <button class="aba-botao" data-aba="disponibilidade">Disponibilidade</button>
       </div>
 
       <!-- Aba Solicitações -->
@@ -84,6 +85,28 @@
 
           <h3 style="margin-top: 32px; margin-bottom: 16px;">Histórico de atendimentos</h3>
           <div id="historico-atendimentos"></div>
+        </div>
+      </section>
+
+      <!-- Aba Disponibilidade -->
+      <section id="aba-disponibilidade" class="painel-conteudo">
+        <div class="ficha-cliente" style="max-width: 640px;">
+          <h2>Dias e horários de atendimento</h2>
+          <p class="whatsapp-cliente">
+            Marque os dias em que você atende e defina a janela de horário de cada um.
+            O formulário do site passa a oferecer só o que estiver configurado aqui.
+          </p>
+
+          <div id="mensagem-erro-disponibilidade" class="mensagem-api erro" style="display: none;"></div>
+          <div id="mensagem-sucesso-disponibilidade" class="mensagem-api sucesso"></div>
+
+          <div id="lista-disponibilidade">
+            <p class="carregando">Carregando disponibilidade...</p>
+          </div>
+
+          <button id="botao-salvar-disponibilidade" class="botao botao-primario">
+            Salvar disponibilidade
+          </button>
         </div>
       </section>
 

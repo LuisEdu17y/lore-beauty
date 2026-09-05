@@ -1,9 +1,9 @@
 """Schemas Pydantic usados na fronteira da API (entrada/saída), separados dos models de tabela."""
-from datetime import date, datetime
+from datetime import date, datetime, time
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 
-from models import CATEGORIAS_IMAGEM_VALIDAS, SERVICOS_VALIDOS, STATUS_VALIDOS
+from models import CATEGORIAS_IMAGEM_VALIDAS, DIAS_SEMANA, SERVICOS_VALIDOS, STATUS_VALIDOS
 
 
 class AgendamentoCreate(BaseModel):
@@ -37,6 +37,16 @@ class AgendamentoCreate(BaseModel):
         if len(digitos) < 10:
             raise ValueError("WhatsApp inválido")
         return valor.strip()
+
+    @field_validator("horario_preferido")
+    @classmethod
+    def validar_formato_horario(cls, valor: str) -> str:
+        from horarios import converter_horario
+
+        valor = valor.strip()
+        if converter_horario(valor) is None:
+            raise ValueError("Horário em formato inválido. Use HH:MM, por exemplo 14:30.")
+        return valor
 
 
 class AgendamentoStatusUpdate(BaseModel):
@@ -236,3 +246,60 @@ class DepoimentoOut(BaseModel):
     atualizado_em: datetime
 
     model_config = {"from_attributes": True}
+
+
+class DisponibilidadeDiaIn(BaseModel):
+    """Configuração de um dia da semana enviada pelo painel."""
+
+    dia_semana: int
+    ativo: bool = True
+    hora_inicio: time
+    hora_fim: time
+
+    @field_validator("dia_semana")
+    @classmethod
+    def validar_dia_semana(cls, valor: int) -> int:
+        if not 0 <= valor <= 6:
+            raise ValueError("Dia da semana deve ser um valor entre 0 (segunda) e 6 (domingo)")
+        return valor
+
+    @model_validator(mode="after")
+    def validar_janela(self):
+        # Um dia marcado como indisponível não precisa de janela coerente —
+        # os campos ficam desabilitados na interface e o horário é ignorado.
+        if self.ativo and self.hora_fim <= self.hora_inicio:
+            raise ValueError(
+                f"{DIAS_SEMANA[self.dia_semana]}: o horário final deve ser posterior ao inicial"
+            )
+        return self
+
+
+class DisponibilidadeUpdate(BaseModel):
+    """Payload do PUT: a configuração completa dos 7 dias de uma vez."""
+
+    dias: list[DisponibilidadeDiaIn]
+
+    @field_validator("dias")
+    @classmethod
+    def validar_dias(cls, valor: list[DisponibilidadeDiaIn]) -> list[DisponibilidadeDiaIn]:
+        indices = [dia.dia_semana for dia in valor]
+        if sorted(indices) != list(range(7)):
+            raise ValueError("Envie exatamente uma configuração para cada um dos 7 dias da semana")
+        return valor
+
+
+class DisponibilidadeDiaOut(BaseModel):
+    """Configuração de um dia como o painel consome — horas já em texto HH:MM."""
+
+    dia_semana: int
+    rotulo: str
+    ativo: bool
+    hora_inicio: str
+    hora_fim: str
+
+
+class HorariosDisponiveisOut(BaseModel):
+    """Resposta da rota pública: só a data e os horários livres, nada de cliente."""
+
+    data: date
+    horarios: list[str]

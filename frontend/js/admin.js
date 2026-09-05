@@ -17,6 +17,11 @@ const ROTULOS_STATUS = {
 };
 
 // ---------- Painel: abas ----------
+// Abas que buscam os dados no backend toda vez que são abertas
+const AO_ABRIR_ABA = {
+  disponibilidade: () => carregarDisponibilidade(),
+};
+
 function inicializarAbas() {
   const botoes = document.querySelectorAll(".aba-botao");
   if (!botoes.length) return;
@@ -28,6 +33,9 @@ function inicializarAbas() {
 
       botao.classList.add("ativa");
       document.getElementById(`aba-${botao.dataset.aba}`).classList.add("ativa");
+
+      const aoAbrir = AO_ABRIR_ABA[botao.dataset.aba];
+      if (aoAbrir) aoAbrir();
     });
   });
 }
@@ -189,9 +197,123 @@ function inicializarVoltarFicha() {
   });
 }
 
+// ---------- Painel: disponibilidade ----------
+function mostrarMensagemDisponibilidade(tipo, texto) {
+  const erro = document.getElementById("mensagem-erro-disponibilidade");
+  const sucesso = document.getElementById("mensagem-sucesso-disponibilidade");
+  erro.style.display = "none";
+  sucesso.style.display = "none";
+
+  if (!texto) return;
+  const alvo = tipo === "sucesso" ? sucesso : erro;
+  alvo.textContent = texto;
+  alvo.style.display = "block";
+}
+
+function montarLinhaDisponibilidade(dia) {
+  const desabilitado = dia.ativo ? "" : "disabled";
+  return `
+    <div class="dia-disponibilidade ${dia.ativo ? "" : "inativo"}" data-dia="${dia.dia_semana}">
+      <label class="dia-check">
+        <input type="checkbox" data-campo="ativo" ${dia.ativo ? "checked" : ""}>
+        <span>${dia.rotulo}</span>
+      </label>
+      <div class="dia-janela">
+        <div class="campo">
+          <label>Horário inicial</label>
+          <input type="time" data-campo="hora_inicio" value="${dia.hora_inicio}" step="1800" ${desabilitado}>
+        </div>
+        <div class="campo">
+          <label>Horário final</label>
+          <input type="time" data-campo="hora_fim" value="${dia.hora_fim}" step="1800" ${desabilitado}>
+        </div>
+      </div>
+    </div>`;
+}
+
+async function carregarDisponibilidade() {
+  const lista = document.getElementById("lista-disponibilidade");
+  if (!lista) return;
+
+  mostrarMensagemDisponibilidade(null, null);
+  lista.innerHTML = `<p class="carregando">Carregando disponibilidade...</p>`;
+
+  try {
+    const dias = await chamarApi("/api/admin/disponibilidade");
+    lista.innerHTML = dias.map(montarLinhaDisponibilidade).join("");
+
+    // Marcar/desmarcar o dia habilita ou desabilita a janela de horário dele
+    lista.querySelectorAll('input[data-campo="ativo"]').forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        const linha = checkbox.closest(".dia-disponibilidade");
+        linha.classList.toggle("inativo", !checkbox.checked);
+        linha.querySelectorAll('input[type="time"]').forEach((campo) => {
+          campo.disabled = !checkbox.checked;
+        });
+      });
+    });
+  } catch (erro) {
+    lista.innerHTML = "";
+    mostrarMensagemDisponibilidade("erro", erro.message);
+  }
+}
+
+async function salvarDisponibilidade() {
+  const lista = document.getElementById("lista-disponibilidade");
+  const botao = document.getElementById("botao-salvar-disponibilidade");
+  const linhas = lista.querySelectorAll(".dia-disponibilidade");
+  if (!linhas.length) return;
+
+  mostrarMensagemDisponibilidade(null, null);
+
+  const dias = [...linhas].map((linha) => ({
+    dia_semana: Number(linha.dataset.dia),
+    ativo: linha.querySelector('input[data-campo="ativo"]').checked,
+    hora_inicio: linha.querySelector('input[data-campo="hora_inicio"]').value,
+    hora_fim: linha.querySelector('input[data-campo="hora_fim"]').value,
+  }));
+
+  // Checagem local só para dar um retorno rápido — quem valida de verdade é o backend
+  const invalido = dias.find(
+    (dia) => dia.ativo && (!dia.hora_inicio || !dia.hora_fim || dia.hora_fim <= dia.hora_inicio)
+  );
+  if (invalido) {
+    mostrarMensagemDisponibilidade(
+      "erro",
+      "Nos dias disponíveis, o horário final precisa ser posterior ao inicial."
+    );
+    return;
+  }
+
+  botao.disabled = true;
+  botao.textContent = "Salvando...";
+
+  try {
+    await chamarApi("/api/admin/disponibilidade", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dias }),
+    });
+    await carregarDisponibilidade();
+    mostrarMensagemDisponibilidade("sucesso", "Disponibilidade salva com sucesso.");
+  } catch (erro) {
+    mostrarMensagemDisponibilidade("erro", erro.message);
+  } finally {
+    botao.disabled = false;
+    botao.textContent = "Salvar disponibilidade";
+  }
+}
+
+function inicializarDisponibilidade() {
+  const botao = document.getElementById("botao-salvar-disponibilidade");
+  if (!botao) return;
+  botao.addEventListener("click", salvarDisponibilidade);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   inicializarAbas();
   inicializarVoltarFicha();
+  inicializarDisponibilidade();
   carregarAgendamentos();
   carregarClientes();
 });
